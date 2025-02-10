@@ -1,0 +1,22 @@
+services:
+  gameapp-client:
+    restart: always
+    # image: gameapp-client:latest
+    build:
+      context: ./gameapp-client
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+    stdin_open: true
+    tty: true
+  gameapp-server:
+    restart: always
+    # image: gameapp-server:latest
+    build:
+      context: ./gameapp-server
+      dockerfile: Dockerfile
+    ports:
+      - 4001:4001
+    stdin_open: true
+    tty: true
+
