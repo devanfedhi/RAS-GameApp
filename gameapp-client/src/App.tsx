@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-const socket = io(`http://gameapp-server:4001`);
+const socket = io(`gameapp-server:4001`);
 
 type Message = {
   user: string;

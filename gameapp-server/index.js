@@ -13,7 +13,7 @@ var socket_user = {};
 
 const io = new Server(server, {
     cors: {
-        origin: `http://gameapp-client:4000`, // TODO: need to change to 0.0.0.0 or the other container name i think
+        origin: "*", // TODO: need to change to 0.0.0.0 or the other container name i think
         methods: ['GET', 'POST']
     }
 });
