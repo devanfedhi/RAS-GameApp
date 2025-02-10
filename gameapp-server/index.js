@@ -13,7 +13,7 @@ var socket_user = {};
 
 const io = new Server(server, {
     cors: {
-        origin: "11.0.0.2:4000", // TODO: need to change to 0.0.0.0 or the other container name i think
+        origin: "*", // TODO: need to change to 0.0.0.0 or the other container name i think
         methods: ['GET', 'POST']
     }
 });
@@ -37,5 +37,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(4001, () => {
-    console.log("Server is running on port 4001");
-});
+    console.log('listening on *:4001');
+  });

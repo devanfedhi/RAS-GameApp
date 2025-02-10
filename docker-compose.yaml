@@ -9,6 +9,8 @@ services:
       - 4000:4000
     stdin_open: true
     tty: true
+    networks:
+      - gameapp-networks
   gameapp-server:
     restart: always
     # image: gameapp-server:latest
@@ -19,4 +21,9 @@ services:
       - 4001:4001
     stdin_open: true
     tty: true
+    networks:
+      - gameapp-networks
 
+networks:
+  gameapp-networks:
+    driver: bridge
