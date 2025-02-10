@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-const socket = io(`http://0.0.0.0:4001`);
+const socket = io(`https://www.project-raspberry.me`);
 
 type Message = {
   user: string;
