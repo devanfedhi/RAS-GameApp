@@ -16,6 +16,9 @@
 	--inversed-text-color: #fff;
 	--inversed-softer-text-color: #bebebe;
 	--inversed-softest-text-color: #707070;
+	--btn-color: #0987f2;
+	--table-border-color: #ececec;
+	--table-background-color: #f2f2f2;
 }
 
 [data-theme='dark'] {
@@ -28,6 +31,7 @@
 	--inversed-text-color: #222;
 	--inversed-softer-text-color: #434343;
 	--inversed-softest-text-color: #707070;
+	--btn-color: #0987f2;
 
 }
 
@@ -46,9 +50,30 @@ h1 {
 h1 {
 	color: var(--text-color);
 	font-family: "Roboto", sans-serif;
-    font-size: 18px;
+    font-size: 32px;
     font-weight: 700;
 	
+}
+
+h2 {
+	color: var(--text-color);
+	font-family: "Roboto", sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+h3 {
+	color: var(--text-color);
+	font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+p {
+	color: var(--text-color);
+	font-family: "Roboto", sans-serif;
+    font-size: 15px;
+    font-weight: 400;	
 }
 
 
