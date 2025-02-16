@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../../CheckersStyles.module.css';
+import styles from './LobbyStyles.module.css';
 import { PAGE_CREATE_NEW_GAME } from '../Props';
 
 function Lobby({ setPage, allGames }) {
-
-  console.log("Lobby.jsx", allGames)
 
   return (
     <div>

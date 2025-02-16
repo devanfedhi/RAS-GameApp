@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import './App.css'
-import Home from './pages/Home'
-import ChatApp from './pages/ChatApp'
-import Checkers from './pages/Checkers/Checkers';
+import HomePage from './pages/Home/HomePage'
+import ChatAppPage from './pages/ChatApp/ChatAppPage'
+import CheckersPage from './pages/Checkers/CheckersPage';
+
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -11,9 +13,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/chatapp" element={<ChatApp/>} />
-          <Route path="/checkers" element={<Checkers/>} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/chatapp" element={<ChatAppPage/>} />
+          <Route path="/checkers" element={<CheckersPage/>} />
 
         </Routes>
       </BrowserRouter>

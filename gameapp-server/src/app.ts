@@ -12,5 +12,5 @@ const server = http.createServer(app);
 setupSocketServer(server);
 
 server.listen(4001, () => {
-  console.log('listening on *:4001');
+  console.log('Socket server listening on *:4001');
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../../CheckersStyles.module.css';
+import styles from './CreateNewGameStyles.module.css';
 
 function CreateNewGame({ createGame }) {
   const [name, setName] = useState('');

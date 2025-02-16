@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styles from './CheckersStyles.module.css';
-import Lobby from './components/Lobby/Lobby';
-import CreateNewGame from './components/CreateNewGame/CreateNewGame';
+import Lobby from '../Lobby/Lobby';
+import CreateNewGame from '../CreateNewGame/CreateNewGame';
 import io from 'socket.io-client';
-import { PAGE_GAME, PAGE_LOBBY, PAGE_CREATE_NEW_GAME } from './components/Props';
+import { PAGE_GAME, PAGE_LOBBY, PAGE_CREATE_NEW_GAME } from '../Props';
 // import { get } from 'http';
+
 
 function Checkers() {
 
@@ -12,8 +13,8 @@ function Checkers() {
 	const [socket, setSocket] = useState(null);
   const [allGames, setAllGames] = useState([]);
 
-  console.log("Checkers.jsx", allGames);
 
+  // Socket connection initialisation
   useEffect(() => {
     const newSocket = io(import.meta.env.PROD ? 'https://www.otterhello.live' : 'http://localhost:4001');
     
@@ -28,43 +29,44 @@ function Checkers() {
     if (socket) {
       console.log("Socket connected, setting up event listener for 'send-games'");
 
-      const handleSendGames = (games) => {
-        console.log("Received games:", games);
-        setAllGames(games);
-      };
-
       socket.on('send-games', handleSendGames);
 
       socket.emit('get-games');
-
-
 
       return () => {
         console.log("Cleaning up event listener for 'send-games'");
         socket.off('send-games', handleSendGames);
       };
     } else {
-      console.log("Socket not connected");
+      // console.log("Socket not connected");
     }
   }, [socket]);
 
   
   const createGame = (name, gameName) => {
-    console.log("createGame reached", name, gameName);
+    // console.log("createGame reached", name, gameName);
     socket.emit('checkers-create-game', {name, gameName});
     // setPage(PAGE_GAME);
   };
 
+  const handleSendGames = (games) => {
+    console.log("Received games:", games);
+    setAllGames(games);
+  };
+
   return (
-    <section className={styles.container}>
-        <h1>Checkers</h1>
-				{page === PAGE_LOBBY && (
-						<Lobby setPage={setPage} allGames={allGames.games}/>
-				)}
-				{page === PAGE_CREATE_NEW_GAME && (
-						<CreateNewGame createGame={createGame}/>
-				)}
-    </section>
+    <>
+      <section className={styles.container}>
+          <h1>Checkers</h1>
+          {page === PAGE_LOBBY && (
+              <Lobby setPage={setPage} allGames={allGames.games}/>
+          )}
+          {page === PAGE_CREATE_NEW_GAME && (
+              <CreateNewGame createGame={createGame}/>
+          )}
+      </section>
+    </>
+    
   )
 }
 
