@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styles from './LobbyStyles.module.css';
-import { PAGE_CREATE_NEW_GAME } from '../Props';
+import { PAGE_JOIN_GAME, PAGE_CREATE_NEW_GAME } from '../Props';
 
-function Lobby({ setPage, allGames }) {
+function Lobby({ setPage, allGames, setChosenGame }) {
+
+  const handleJoinGame = (game) => {
+    console.log("Joining game: ", game.gameName);
+    setChosenGame(game)
+    setPage(PAGE_JOIN_GAME);
+  }
 
   return (
     <section className={styles.container}>
@@ -25,22 +31,28 @@ function Lobby({ setPage, allGames }) {
             <th><h3></h3></th>
           </tr>
         </thead>
-        <tbody classname={styles.lobbyTableBody}>
+        <tbody>
         {!allGames ? (
           <tr>
-            <td colSpan="3">Loading... no games created yet</td>
+            <td colSpan="4"><p>Loading... </p></td>
           </tr>
-        ) : (
+        ) : allGames.length === 0 ? (
+          <tr>
+            <td colSpan="4"><p>No games created yet</p></td>
+          </tr>
+        ): (
           allGames.map((game) => (
             <tr key={game.gameName}>
               <td><p>{game.gameName}</p></td>
-              <td><p>{game.currentNumPlayers} / 2</p></td>
-              <td><p>
-                {game.playerNames.map((player) => (
-                  <div key={player}>{player}</div>
-                ))}
-              </p></td>
-              <td><button className={styles.joinButton}><p>Join</p></button></td>
+              <td><p>{game.currentNumPlayers} / {game.maxPlayers}</p></td>
+              <td>
+                <ul>
+                  {game.playerNames.map((player) => (
+                    <li key={player}><p>{player}</p></li>
+                  ))}
+                </ul>
+              </td>
+              <td><button onClick={() => handleJoinGame(game)} className={styles.joinButton} disabled={game.currentNumPlayers >= game.maxPlayers}><p>Join</p></button></td>
             </tr>
           ))
         )}

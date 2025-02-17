@@ -12,13 +12,20 @@ function Header() {
     
     const {theme, _} = useTheme();
 
+    const handleLinkClick = (e, destination) => {
+      if (location.pathname === destination) {
+          e.preventDefault();
+          window.location.href = destination;
+      }
+  };
+
   return (
     <section id="header" className={styles.container}>
         <div className={styles.title}><HashLink className={styles.anchor} to="/" >Otterhello</HashLink></div>
         <ul ref={menuRef} className={styles.nav}>
             <div className={styles.navItems}>
-                <li className={styles.item}><HashLink className={styles.anchor} to="/chatapp" >Chat</HashLink></li>
-                <li className={styles.item}><HashLink className={styles.anchor} to="/checkers" >Checkers</HashLink></li>
+                <li className={styles.item}><HashLink className={styles.anchor} to="/chatapp" onClick={(e) => handleLinkClick(e, '/chatapp')}>Chat</HashLink></li>
+                <li className={styles.item}><HashLink className={styles.anchor} to="/checkers" onClick={(e) => handleLinkClick(e, '/checkers')}>Checkers</HashLink></li>
             </div>
         </ul>
     </section>

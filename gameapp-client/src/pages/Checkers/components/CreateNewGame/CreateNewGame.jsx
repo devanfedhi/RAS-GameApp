@@ -7,15 +7,23 @@ function CreateNewGame({ createGame }) {
 
   return (
     <section className={styles.container}>
-        <h1>Create A New Game</h1>
+        <h2>Create A New Game</h2>
 
-        <h2>Name</h2>
-        <input placeholder='Enter your name' onChange={(event) => { setName(event.target.value); }}></input>
+        <div className={styles.nameInput}>
+          <h3>Your Name</h3>
+          <input placeholder='Enter your name' onChange={(event) => { setName(event.target.value); }}></input>
+        </div>
 
-        <h2>Name of Game</h2>
-        <input placeholder='Enter name of game' onChange={(event) => { setGameName(event.target.value); }}></input>
+        <div className={styles.gameInput}>
+          <h3>Name of Game</h3>
+          <input placeholder='Enter name of game' onChange={(event) => { setGameName(event.target.value); }}></input>
+        </div>
 
-        <button onClick={() => createGame(name, gameName)}>Create</button>
+        
+
+        
+
+        <button className={styles.createButton} onClick={() => createGame(name, gameName)}>Create</button>
 
     </section>
   )

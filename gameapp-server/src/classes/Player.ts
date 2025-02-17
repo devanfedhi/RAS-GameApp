@@ -1,8 +1,12 @@
+import { Colour } from '../enums/Colour';
+
 export class Player {
 
     private id: number | null = null;
 
-    constructor(private name: string, private socketId: string) {
+    private colour: Colour | null = null;
+
+    constructor(private name: string, private socketId: string, private gameId: string) {
 
     }
 
@@ -12,6 +16,18 @@ export class Player {
 
     public getName(): string {      
         return this.name;
+    }
+
+    public getSocketId(): string {
+        return this.socketId;
+    }
+
+    public getGameId(): string {
+        return this.gameId;
+    }
+
+    public setColour(colour: Colour): void {
+        this.colour = colour;
     }
 
 }

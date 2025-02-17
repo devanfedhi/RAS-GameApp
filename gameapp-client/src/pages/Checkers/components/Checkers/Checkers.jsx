@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import styles from './CheckersStyles.module.css';
 import Lobby from '../Lobby/Lobby';
 import CreateNewGame from '../CreateNewGame/CreateNewGame';
+import JoinGame from '../JoinGame/JoinGame';
+import Game from '../Game/Game';
 import io from 'socket.io-client';
-import { PAGE_GAME, PAGE_LOBBY, PAGE_CREATE_NEW_GAME } from '../Props';
+import { PAGE_GAME, PAGE_LOBBY, PAGE_JOIN_GAME, PAGE_CREATE_NEW_GAME } from '../Props';
 // import { get } from 'http';
 
 
@@ -12,6 +14,8 @@ function Checkers() {
 	const [page, setPage] = useState(PAGE_LOBBY);
 	const [socket, setSocket] = useState(null);
   const [allGames, setAllGames] = useState([]);
+  const [game, setGame] = useState({ gameName: "", gameData: [] });
+  const [chosenGame, setChosenGame] = useState({});
 
 
   // Socket connection initialisation
@@ -42,11 +46,18 @@ function Checkers() {
     }
   }, [socket]);
 
+  const joinGame = (name, chosenGame) => {
+    setGame({ gameName: chosenGame.gameName, gameData: [] });
+    socket.emit('checkers-join-game', {name: name, gameName: chosenGame.gameName});
+    setPage(PAGE_GAME);
+  }
+
   
   const createGame = (name, gameName) => {
+    setGame({ gameName, gameData: [] });
     // console.log("createGame reached", name, gameName);
     socket.emit('checkers-create-game', {name, gameName});
-    // setPage(PAGE_GAME);
+    setPage(PAGE_GAME);
   };
 
   const handleSendGames = (games) => {
@@ -59,11 +70,18 @@ function Checkers() {
       <section className={styles.container}>
           <h1>Checkers</h1>
           {page === PAGE_LOBBY && (
-              <Lobby setPage={setPage} allGames={allGames.games}/>
+              <Lobby setPage={setPage} setChosenGame={setChosenGame} allGames={allGames.games}/>
           )}
           {page === PAGE_CREATE_NEW_GAME && (
               <CreateNewGame createGame={createGame}/>
           )}
+          {page === PAGE_JOIN_GAME && (
+              <JoinGame joinGame={joinGame} chosenGame={chosenGame}/> 
+          )}
+          {page === PAGE_GAME && (
+              <Game game={game}/> 
+          )}
+
       </section>
     </>
     
