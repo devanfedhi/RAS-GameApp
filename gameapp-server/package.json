@@ -2,11 +2,10 @@
   "name": "gameapp-server",
   "version": "1.0.0",
   "main": "src/app.ts",
-  "type": "module",
   "author": "",
   "license": "ISC",
   "scripts": {
-    "start": "NODE_ENV=prod node src/app.ts",
+    "start": "NODE_ENV=prod ts-node src/app.ts",
     "dev": "NODE_ENV=dev nodemon --config nodemon.json src/app.ts"
   },
   "description": "",
