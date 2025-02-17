@@ -14,7 +14,7 @@ function Checkers() {
 	const [page, setPage] = useState(PAGE_LOBBY);
 	const [socket, setSocket] = useState(null);
   const [allGames, setAllGames] = useState([]);
-  const [game, setGame] = useState({ gameName: "", gameData: [] });
+  const [game, setGame] = useState({ gameName: "", gameData: null });
   const [chosenGame, setChosenGame] = useState({});
 
 
@@ -37,33 +37,50 @@ function Checkers() {
 
       socket.emit('get-games');
 
+      socket.on('checkers-render-game', handleRenderGame);
+
       return () => {
         console.log("Cleaning up event listener for 'send-games'");
         socket.off('send-games', handleSendGames);
+        socket.off('checkers-render-game', handleRenderGame);
       };
     } else {
       // console.log("Socket not connected");
     }
   }, [socket]);
 
+
   const joinGame = (name, chosenGame) => {
-    setGame({ gameName: chosenGame.gameName, gameData: [] });
+    setGame({ gameName: chosenGame.gameName, gameData: null });
     socket.emit('checkers-join-game', {name: name, gameName: chosenGame.gameName});
     setPage(PAGE_GAME);
   }
 
   
   const createGame = (name, gameName) => {
-    setGame({ gameName, gameData: [] });
+    setGame({ gameName, gameData: null });
     // console.log("createGame reached", name, gameName);
     socket.emit('checkers-create-game', {name, gameName});
     setPage(PAGE_GAME);
+
+    console.log(game);
   };
 
   const handleSendGames = (games) => {
     console.log("Received games:", games);
     setAllGames(games);
   };
+
+  const handleRenderGame = (data) => {
+    console.log("Received data:", data);
+
+    setGame((prevGame) => ({
+      ...prevGame,
+      gameData: data,
+    }));
+  };
+
+
 
   return (
     <>

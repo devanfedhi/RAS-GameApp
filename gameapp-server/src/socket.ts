@@ -1,19 +1,21 @@
 import { get } from "http";
 import { CheckersGame } from "./classes/CheckersGame";
 import { Player } from "./classes/Player";
+import { CheckersGameManager } from "./classes/CheckersGameManager";
 
 interface SocketUser {
     [key: string]: string;
 }
-
-
 const socket_user: SocketUser = {};
+
+
 let checkersGames: { [key: string]: CheckersGame } = {};
 let players: { [key: string]: Player } = {};
 
+let checkers = CheckersGameManager.getInstance();
 
 function getGames() {
-    return Object.values(checkersGames).map((game: CheckersGame) => {
+    return checkers.getGames().map((game: CheckersGame) => {
         return {
             gameName: game.getGameName(),
             currentNumPlayers: game.getPlayers().length,
@@ -28,58 +30,65 @@ const connections = (io: any): void => {
         console.log(`User connected to server: ${socket.id}`);
 
         socket.on("checkers-create-game", (data: { gameName: string, name: string }) => {
-            // socket.join(`checkers-${data.gameName}`);
+            
 
-            let game = new CheckersGame(data.gameName);
-            let player = new Player(data.name, socket.id, data.gameName);
-            game.addPlayer(player);
+            let game = checkers.createGame(data.gameName);
 
-            checkersGames[data.gameName] = game;
-            players[socket.id] = player;
+            let player = game.addPlayer(data.name, socket.id);
+            
+            checkers.trackPlayer(socket.id, player);
+
 
             const games = getGames();
-
             console.log(games);
-
             socket.broadcast.emit("send-games", { games });
+
+            socket.join(`checkers-${data.gameName}`);
             
         });
 
         socket.on("checkers-join-game", (data: { gameName: string, name: string }) => {
-            // socket.join(`checkers-${data.gameName}`);
+            
 
-            let player = new Player(data.name, socket.id, data.gameName);
+            let game = checkers.getGame(data.gameName);
 
-            // TODO: Client response if game does not exist
-            if  (!checkersGames[data.gameName]) {
+            if (!game) {
                 socket.emit("checkers-join-game-error", { message: "Game does not exist." });
                 return;
             }
 
-            let game = checkersGames[data.gameName];
-
             let currentGamePlayers = game.getPlayers();
 
-            // TODO: Client response if player is already in the game
             for (let i = 0; i < currentGamePlayers.length; i++) {
-                if (currentGamePlayers[i].getSocketId() === player.getSocketId()) {
+                if (currentGamePlayers[i].getSocketId() === socket.id) {
                     socket.emit("checkers-join-game-error", { message: "You are already in this game." });
                     return;
                 }
             }
 
-            players[socket.id] = player;
-            game.addPlayer(player);
+            let player = game.addPlayer(data.name, socket.id);
+
+            checkers.trackPlayer(socket.id, player);
+
 
             const games = getGames();
-
             console.log(games);
-
             socket.broadcast.emit("send-games", { games });
 
+            socket.join(`checkers-${data.gameName}`);
+
             // attempt a game start
-            game.startGame();
+            let gameStarted = game.startGame();
             
+            if (gameStarted) {
+                const board = game.getBoard();
+
+                for (let i = 0; i < game.getPlayers().length; i++) {
+                    io.to(game.getPlayers()[i].getSocketId()).emit("checkers-render-game", { board: board?.renderBoard(), currentPlayerTurn: game.getCurrentPlayerTurn(), player: game.getPlayers()[i].getId(), playerName: game.getPlayers()[i].getName(), opposingPlayerName: game.getPlayers()[i === 0 ? 1 : 0].getName() });
+                }
+            }
+            
+        
         });
 
         socket.on("get-games", () => {
@@ -104,17 +113,17 @@ const connections = (io: any): void => {
         socket.on("disconnect", (reason: string) => {
             console.log(`User disconnected from server: ${socket.id} because of ${reason}`);
 
-            if (players[socket.id]) {
-                let player = players[socket.id];
+            let player = checkers.getPlayer(socket.id);
+            if (player) {
 
-                delete checkersGames[player.getGameId()];
+                checkers.endGame(player.getGameId());
+
 
                 const games = getGames();
-
                 console.log(games);
-
                 socket.broadcast.emit("send-games", { games });
             }
+
 
         });
     });

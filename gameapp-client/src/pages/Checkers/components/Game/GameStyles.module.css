@@ -7,3 +7,62 @@
     /* border: 2px solid red; */
 
 }
+
+.checkersBoard {
+    background-color: red;
+    width: 800px;
+    height: 800px;
+    display: grid;
+    grid-template-columns: repeat(8,100px);
+    grid-template-rows: repeat(8,100px);
+    border: 3px solid black;
+
+    .cell {
+        width: 100px;
+        height: 100px;
+        box-sizing: border-box;
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        p {
+            position: absolute; /* Add this line */
+            top: 0; /* Add this line */
+            left: 0; /* Add this line */
+            color: red;
+
+
+        }
+
+        
+    }
+
+    .blackCell {
+        background-color: #4c382e;
+    }
+
+    .whiteCell {
+        background-color: #ecc59a;
+    }
+
+    .token {
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        /* z-index: 10; */
+    }
+
+    .blackToken {
+        background-color: black;
+    }
+
+    .whiteToken {
+        background-color: white;
+    }
+
+
+
+
+}

@@ -1,4 +1,4 @@
 export enum Colour {
-    White = 0,
-    Black = 1
+    White = 1,
+    Black = 2
 }

@@ -14,6 +14,10 @@ export class Player {
         this.id = id;
     }
 
+    public getId(): number | null {
+        return this.id;
+    }
+
     public getName(): string {      
         return this.name;
     }
